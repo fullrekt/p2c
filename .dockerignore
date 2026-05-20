@@ -1,0 +1,10 @@
+.git
+.gitignore
+.env
+bot_users.db
+bot_users.db-wal
+bot_users.db-shm
+data
+*.log
+tmp
+coverage.out

@@ -1,0 +1,26 @@
+#!/bin/bash
+set -e
+
+REPO_DIR="$HOME/p2c-sniper.git"
+WORK_DIR="$HOME/p2c-sniper"
+
+echo "▶ Deploying P2C Sniper Bot..."
+
+# Check out latest code into working directory
+git --work-tree="$WORK_DIR" --git-dir="$REPO_DIR" checkout -f
+
+cd "$WORK_DIR"
+
+# Abort if .env is missing — never auto-create it
+if [ ! -f .env ]; then
+  echo "✗ .env not found at $WORK_DIR/.env"
+  echo "  Create it on the server: nano ~/p2c-sniper/.env"
+  exit 1
+fi
+
+# Rebuild images and restart containers
+docker compose build --no-cache
+docker compose up -d --force-recreate --remove-orphans
+
+echo "✓ Deploy complete"
+docker compose ps
